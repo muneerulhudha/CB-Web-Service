@@ -28,6 +28,15 @@
 
 <body>
 
+    <script type="text/javascript">
+        var x = document.cookie;
+
+        if(x === ""){
+            window.location.replace("index.html");
+        }
+
+    </script>
+
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
@@ -38,20 +47,28 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Start Bootstrap</a>
+                <a class="navbar-brand" href="#">CourseBook</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#">About</a>
+                        <a href="about.html">About</a>
                     </li>
                     <li>
-                        <a href="#">Services</a>
+                        <a href="profile.html">Profile</a>
                     </li>
                     <li>
-                        <a href="#">Contact</a>
+                        <a href="course.html">Courses</a>
+                    </li>
+                    <li>
+                        <a href="contact.html">Contact</a>
+                    </li>
+                    <li>
+                        <a id="logout" href="#">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -65,16 +82,7 @@
 
         <div class="row">
 
-            <div class="col-md-3">
-                <p class="lead">Shop Name</p>
-                <div class="list-group">
-                    <a href="#" class="list-group-item">Category 1</a>
-                    <a href="#" class="list-group-item">Category 2</a>
-                    <a href="#" class="list-group-item">Category 3</a>
-                </div>
-            </div>
-
-            <div class="col-md-9">
+            <div class="col-md-12">
 
                 <div class="row carousel-holder">
 
@@ -87,13 +95,19 @@
                             </ol>
                             <div class="carousel-inner">
                                 <div class="item active">
-                                    <img class="slide-image" src="http://placehold.it/800x300" alt="">
+                                    <a href="about.html">
+                                        <img class="slide-image" src="http://placehold.it/800x300?text=About%20US" alt="">
+                                    </a>
                                 </div>
                                 <div class="item">
-                                    <img class="slide-image" src="http://placehold.it/800x300" alt="">
+                                    <a href="contact.html">
+                                        <img class="slide-image" src="http://placehold.it/800x300?text=Contact" alt="">
+                                    </a>
                                 </div>
                                 <div class="item">
-                                    <img class="slide-image" src="http://placehold.it/800x300" alt="">
+                                    <a href="courses.html">
+                                        <img class="slide-image" src="http://placehold.it/800x300?text=Courses" alt="">
+                                    </a>
                                 </div>
                             </div>
                             <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
@@ -243,7 +257,7 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
+                    <p>Copyright &copy; CourseBook 2016</p>
                 </div>
             </div>
         </footer>
@@ -253,6 +267,7 @@
 
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/session.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>

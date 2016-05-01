@@ -5,16 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
@@ -84,4 +88,34 @@ public class GenericService {
 		}
 		
 	}
+	
+	@GET
+	@Path("profile/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getProfile(@PathParam("username") String username) throws Exception {
+		String url = "http://localhost:8080/CB/rest/profile/" + username;
+		
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpGet request = new HttpGet(url);
+		String auth = "admin:";
+		
+		byte[] byteArray = Base64.encodeBase64(auth.getBytes());
+		String encoding = new String(byteArray);
+		
+		request.setHeader("Authorization", "Basic " + encoding);
+		
+		HttpResponse response = client.execute(request);
+		
+		if(response.getStatusLine().getStatusCode() == 200){
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(200).entity(result).build();
+		}else{
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(401).entity(result).build();
+		}
+
+	}
+	
 }
