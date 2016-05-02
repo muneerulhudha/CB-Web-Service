@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Shop Homepage - Start Bootstrap Template</title>
+    <title>CourseBook</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -78,22 +78,15 @@
     </nav>
 
     <!-- Page Content -->
-    <div class="container">
-
-        <div class="row">
-
-            <div class="col-md-12">
-
-                <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-
-                <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-            </div>
-
-        </div>
-
-    </div>
+    <div class="container" id="tourpackages-carousel">
+      
+      <div id="historyDiv" class="row">
+        
+        
+        
+      </div><!-- End row -->
+      
+    </div><!-- End container -->
     <!-- /.container -->
 
     <div class="container">
@@ -118,6 +111,41 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
+    
+    <script>
+    	
+	    jQuery(document).ready(function($) {
+	        var x = document.cookie;
+	        var urls = "rest/history/" + x.split("=")[1];
+	
+	        $.ajax({
+	          type: "GET",
+	          url: urls, 
+	          success: function(result){
+	              console.log(result);
+	              var htmlAppend = "";
+	              
+	              $("#historyDiv")[0].innerHTML = htmlAppend;
+	              
+	              $.each (result, function (key, value) {
+	            	  
+	            	  htmlAppend += " <div class=\"col-sm-6 col-md-3\">" + "<div class=\"thumbnail\">" + 
+	            	  	"<img src=\"http://placehold.it/500x300?text=" + value.courseNumber + "\" alt=\"\">" + 
+	            	  			"<div class=\"caption\" style=\"height: 200px;\">" + "<h3>" + value.courseName + "</h3>" +
+	            	  			"<p>Professor Name: " + value.profName + "</p>" + 
+	            	  			"<p>Term: " + value.term + "</p>" + 
+	            	  			"<p><a href=\"review.html\" id=\"reviewButton\" class=\"btn btn-primary\">Write Review</a></p>"+
+	            	  			"</div><p>&nbsp;</p></div></div>";
+	            	  
+	              });
+	              
+	              $("#historyDiv").append(htmlAppend);
+	              
+	          }
+	        });
+	    });
+    
+    </script>
 
 </body>
 

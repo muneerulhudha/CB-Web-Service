@@ -119,6 +119,69 @@ public class GenericService {
 	}
 	
 	
+	@GET
+	@Path("history/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getHistory(@PathParam("username") String username) throws Exception {
+		String url = "http://localhost:8080/CB/rest/history/" + username;
+		
+		//System.out.println("Username in Web Service: " + username);
+		
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpGet request = new HttpGet(url);
+		String auth = "admin:";
+		
+		byte[] byteArray = Base64.encodeBase64(auth.getBytes());
+		String encoding = new String(byteArray);
+		
+		request.setHeader("Authorization", "Basic " + encoding);
+		
+		HttpResponse response = client.execute(request);
+		
+		if(response.getStatusLine().getStatusCode() == 200){
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(200).entity(result).build();
+		}else{
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(401).entity(result).build();
+		}
+
+	}
+	
+	@GET
+	@Path("cart/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getItemsInCart(@PathParam("username") String username) throws Exception {
+		String url = "http://localhost:8080/CB/rest/cart/" + username;
+		
+		//System.out.println("Username in Web Service: " + username);
+		
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpGet request = new HttpGet(url);
+		String auth = "admin:";
+		
+		byte[] byteArray = Base64.encodeBase64(auth.getBytes());
+		String encoding = new String(byteArray);
+		
+		request.setHeader("Authorization", "Basic " + encoding);
+		
+		HttpResponse response = client.execute(request);
+		
+		if(response.getStatusLine().getStatusCode() == 200){
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(200).entity(result).build();
+		}else{
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(401).entity(result).build();
+		}
+
+	}
+	
+	
 	@POST
 	@Path("profile")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -153,6 +216,163 @@ public class GenericService {
 			
 			return Response.status(200).entity(result).build();
 		}else{
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(401).entity(result).build();
+		}
+
+	}
+	
+	@POST
+	@Path("review")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response writeReview(@FormParam("username") String username, @FormParam("courseno") String courseno, @FormParam("rating") String rating, @FormParam("review") String review) throws Exception {
+		String url = "http://localhost:8080/CB/rest/review";
+		
+		System.out.println("Course number: " + courseno);
+		
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpPost post = new HttpPost(url);
+		post.setHeader("Content-Type", "application/x-www-form-urlencoded");
+		
+		String auth = "admin:";
+		
+		byte[] byteArray = Base64.encodeBase64(auth.getBytes());
+		String encoding = new String(byteArray);
+		
+		post.setHeader("Authorization", "Basic " + encoding);
+		
+		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+		urlParameters.add(new BasicNameValuePair("username", username));
+		urlParameters.add(new BasicNameValuePair("courseno", courseno));
+		urlParameters.add(new BasicNameValuePair("rating", rating));
+		urlParameters.add(new BasicNameValuePair("review", review));
+		
+		post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+		HttpResponse response = client.execute(post);
+		
+		if(response.getStatusLine().getStatusCode() == 200){
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(200).entity(result).build();
+		}else{
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(401).entity(result).build();
+		}
+
+	}
+	
+	@POST
+	@Path("cart")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addToCart(@FormParam("username") String username, @FormParam("courseno") String courseno) throws Exception {
+		String url = "http://localhost:8080/CB/rest/cart";
+		
+//		System.out.println("Course number: " + courseno);
+//		System.out.println("Username: " + username);
+		
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpPost post = new HttpPost(url);
+		post.setHeader("Content-Type", "application/x-www-form-urlencoded");
+		
+		String auth = "admin:";
+		
+		byte[] byteArray = Base64.encodeBase64(auth.getBytes());
+		String encoding = new String(byteArray);
+		
+		post.setHeader("Authorization", "Basic " + encoding);
+		
+		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+		urlParameters.add(new BasicNameValuePair("username", username));
+		urlParameters.add(new BasicNameValuePair("courseno", courseno));
+		
+		post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+		HttpResponse response = client.execute(post);
+		
+		if(response.getStatusLine().getStatusCode() == 200){
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(200).entity(result).build();
+		}else{
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(401).entity(result).build();
+		}
+
+	}
+	
+	@POST
+	@Path("removeFromCart")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response removeFromCart(@FormParam("username") String username, @FormParam("classNumber") String classNumber) throws Exception {
+		String url = "http://localhost:8080/CB/rest/cart/removeFromCart";
+				
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpPost post = new HttpPost(url);
+		post.setHeader("Content-Type", "application/x-www-form-urlencoded");
+		
+		String auth = "admin:";
+		
+		byte[] byteArray = Base64.encodeBase64(auth.getBytes());
+		String encoding = new String(byteArray);
+		
+		post.setHeader("Authorization", "Basic " + encoding);
+		
+		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+		urlParameters.add(new BasicNameValuePair("username", username));
+		urlParameters.add(new BasicNameValuePair("classNumber", classNumber));
+		
+		post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+		HttpResponse response = client.execute(post);
+		
+		if(response.getStatusLine().getStatusCode() == 200){
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(200).entity(result).build();
+		}else{
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(401).entity(result).build();
+		}
+
+	}
+	
+	@POST
+	@Path("checkout")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response checkout(@FormParam("username") String username) throws Exception {
+		String url = "http://localhost:8080/CB/rest/checkout";
+
+		System.out.println("In Web Service checkout");
+		
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpPost post = new HttpPost(url);
+		post.setHeader("Content-Type", "application/x-www-form-urlencoded");
+
+		String auth = "admin:";
+
+		byte[] byteArray = Base64.encodeBase64(auth.getBytes());
+		String encoding = new String(byteArray);
+		
+		post.setHeader("Authorization", "Basic " + encoding);
+		
+		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+		urlParameters.add(new BasicNameValuePair("username", username));
+		
+		post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+		HttpResponse response = client.execute(post);
+		
+		if(response.getStatusLine().getStatusCode() == 200){
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(200).entity(result).build();
+		}else{
+			System.out.println("Failing");
 			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
 			
 			return Response.status(401).entity(result).build();
