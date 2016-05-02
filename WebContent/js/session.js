@@ -21,4 +21,24 @@ jQuery(document).ready(function($) {
       }
     });
 	
+	$("#profileForm").submit(function(e){
+
+	    $.ajax({
+	      type: "POST",
+	      data: $("#profileForm").serialize(),
+	      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	      url: "rest/profile",
+	      success: function(result){
+	          console.log(result);
+	          if(result.success == "true"){
+	        	  console.log("swal");
+	        	  swal("Successfully updated!");
+	          }
+	      }
+	    });
+	    
+	    e.preventDefault();
+	    return false;
+	});
+	
 });
