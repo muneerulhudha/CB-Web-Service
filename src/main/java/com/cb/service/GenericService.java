@@ -159,4 +159,42 @@ public class GenericService {
 		}
 
 	}
+	
+	@POST
+	@Path("search")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response search(@FormParam("searchkey") String key) throws Exception {
+		String url = "http://localhost:8080/CB/rest/course/";
+		
+		System.out.println("Search Key in Web Server: " + key);
+		
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpPost post = new HttpPost(url);
+		post.setHeader("Content-Type", "application/x-www-form-urlencoded");
+		
+		String auth = "admin:";
+		
+		byte[] byteArray = Base64.encodeBase64(auth.getBytes());
+		String encoding = new String(byteArray);
+		
+		post.setHeader("Authorization", "Basic " + encoding);
+		
+		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+		urlParameters.add(new BasicNameValuePair("searchkey", key));
+		
+		post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+		HttpResponse response = client.execute(post);
+		
+		if(response.getStatusLine().getStatusCode() == 200){
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(200).entity(result).build();
+		}else{
+			String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			return Response.status(401).entity(result).build();
+		}
+
+	}
 }

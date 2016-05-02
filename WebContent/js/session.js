@@ -5,21 +5,46 @@ jQuery(document).ready(function($) {
 		window.location.replace("index.html");
 	});
 	
-	var x = document.cookie;
-	var urls = "rest/profile/" + x.split("=")[1];
-	
-	$.ajax({
-      type: "GET",
-      url: urls, 
-      success: function(result){
-    	  $("#name").val(result.name);
-    	  $("#username").val(result.username);
-    	  $("#address").val(result.address);
-    	  $("#phoneno").val(result.phoneno);
-    	  $("#dept").val(result.dept);
-    	  $("#email").val(result.email);
-      }
-    });
+	$("#searchForm").submit(function(e){
+		
+		$.ajax({
+	      type: "POST",
+	      data: $("#searchForm").serialize(),
+	      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	      url: "rest/search",
+	      success: function(result){
+	    	console.log(result);
+	          
+	    	var htmlAppend = "";
+	    	
+	    	$("#searchresult")[0].innerHTML = htmlAppend;
+	    		
+	    
+	        htmlAppend += "<div><table id=\"myTable\" style=\"width: 100%\" class=\"tablesorter\"> <thead style= \"border-bottom: 20px;\"> <tr> <th>courseName</th> <th>courseNumber</th> <th>term</th> <th>classNumber</th> <th>classSection</th><th>profName</th><th>Add to Cart</th></tr> </thead> <tbody>";
+            $.each (result, function (key, value) {
+                htmlAppend += 
+                "<tr><td><p class = \"courseName\">" + value.courseName + "</p></td>"+
+                    "<td><p class = \"courseNumber\">" + value.courseNumber + "</p></td>" +
+                "<td><p class = \"term\">" + value.term + "</p></td>"+
+                    "<td><p class = \"classNumber\">" + value.classNumber + "</p></td>"+
+                    "<td><p class = \"classSection\">" + value.classSection + "</p></td>"+
+                    "<td><p class = \"profName\">" + value.profName + "</p></td>"+
+                    "<td><button type=\"button\" class=\"btn-cart\">Add to cart!</button><td>"; 
+                // htmlAppend += "<td><button type=\"button\">Add to cart!</button><td>";             
+            });
+	        htmlAppend+="</tbody></table></div>";
+	        
+	        $("#searchresult").append(htmlAppend);
+	        
+	        $("#myTable").tablesorter({widthFixed: true, widgets: ['zebra']});
+	       
+	      }
+	    });
+		
+		e.preventDefault();
+		return false;
+		
+	});
 	
 	$("#profileForm").submit(function(e){
 
